@@ -1,6 +1,4 @@
-//TODO: put children of an entitygroup in the hashmap
-//and then crosscut anytime additions or deletions are made, and cause this hashmap to update too
-
+import java.util.ArrayList;
 //TODO: make get position pointcut and around get position advice which can maybe derive from the abstract
 //aspect and be defined in the following aspect
 public aspect EntityAspect extends EntityProtocol{
@@ -54,5 +52,49 @@ public aspect EntityAspect extends EntityProtocol{
 		s = item.getDescription(n);
 		
 	}
+	
+	pointcut removeNode(EntityGroup e, Node n):
+		call(* *.removeN*(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+	
+	after(EntityGroup e, Node n) returning(): removeNode(e, n) {
+		removeChild(e,n);
+	}
+	pointcut addNode(EntityGroup e, Node n):
+		call(void *.addNode(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+	void around(EntityGroup e, Node n): addNode(e, n) {
+		addChild(e,n);
+	}
+	
+	pointcut find(EntityGroup e, Node n):
+		call(boolean *.find(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+	boolean around(EntityGroup e, Node n): find(e, n) {
+		return findChild(e,n);
+	}
+	
+	
+	pointcut getNodes(EntityGroup e):
+		call(* *.getNo*()) && target(e);
+	ArrayList<Node> around(EntityGroup e): getNodes(e) 
+	{
+		System.out.println("foo!!!");
+		
+		return getChildren(e);
+	}
+	
+	pointcut getNode(EntityGroup e, int i):
+		call(Node *.getNode(int)) && target(e) && args(i) && !within(EntityAspect) && !within(EntityProtocol);
+	Node around(EntityGroup e, int i): getNode(e,i) {
+		return getChild(e,i);
+	}
+	
+	pointcut EntityGroupConstructorHelper(EntityGroup e):
+		call(ArrayList<Node> EntityGroupConstructorHelper()) && target(e) && !within(EntityAspect);
+	ArrayList<Node> around(EntityGroup e): EntityGroupConstructorHelper(e) {
+		return getChildren(e);
+		
+	}
+	
+	
+
 		
 }

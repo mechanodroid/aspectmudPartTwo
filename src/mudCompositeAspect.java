@@ -1,14 +1,14 @@
+import java.util.ArrayList;
 public class mudCompositeAspect {
 	public static class mud {
-		public Node masterNode;
+		public Node masterNode = new EntityGroup("master");
 		mud()
 		{
-			masterNode = null;
-			EntityGroup e = new EntityGroup();
-			e.setName("masterEntityGroup");
-			masterNode = e;
+			((EntityGroup)masterNode).setName("masterEntityGroup");
+			((EntityGroup)masterNode).populateMasterNode(masterNode);
 		}
 		public void printFromMasterNode() {
+			ArrayList<Node> e = ((EntityGroup)masterNode).getNodes();
 			for(int i = 0; i<((EntityGroup)masterNode).getNodes().size(); i++) {
 				Node curNode = ((EntityGroup)masterNode).getNode(i);
 				if(curNode instanceof Room) {
@@ -36,7 +36,6 @@ public class mudCompositeAspect {
 			room1.addItemToRoom(wallet);
 			room1.addItemToRoom(remote);
 			((EntityGroup)masterNode).addNode(room1);
-			((EntityGroup)masterNode).addNode(room1.getItemList()); 
 
 			ItemList itemList2 = new ItemList();
 			Room room2 = new Room("Kitchen",itemList2,0,1);
@@ -47,7 +46,6 @@ public class mudCompositeAspect {
 			room2.addItemToRoom(pie);
 			room2.addItemToRoom(apple);
 			((EntityGroup)masterNode).addNode(room2);
-			((EntityGroup)masterNode).addNode(room2.getItemList()); 
 			//^^this is because technically the item list is a seperate composition from the room
 			
 			
@@ -59,7 +57,6 @@ public class mudCompositeAspect {
 			room3.addItemToRoom(trumpet);
 			room3.addNode(treasure); //<-- the power of the composite pattern, we can store whatever in here, assuming its defined from node type
 			((EntityGroup)masterNode).addNode(room3);
-			((EntityGroup)masterNode).addNode(room3.getItemList());
 			//^^this is because technically the item list is a seperate composition from the room, so we add it again, useful for traversal
 			
 		
@@ -70,9 +67,7 @@ public class mudCompositeAspect {
 			Room closet = new Room("Closet");//an empty room, but a room within a room
 			room4.addNode(closet);
 			((EntityGroup)masterNode).addNode(room4);
-			((EntityGroup)masterNode).addNode(room4.getItemList());
 			((EntityGroup)masterNode).addNode(closet);
-			((EntityGroup)masterNode).addNode(closet.getItemList());
 
 			//on the other hand we don't want players to be able to carry around nodes
 			//this is probably too powerful and could create cheats.  So players

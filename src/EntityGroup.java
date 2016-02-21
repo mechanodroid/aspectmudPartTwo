@@ -2,29 +2,37 @@ import java.util.ArrayList;
 
 
 public class EntityGroup extends Node implements Position {
-	private ArrayList<Node> nodes = new ArrayList<Node>();
 
-	
+	Entity empty = new Entity();
 	EntityGroup() {
 		super();
 	}
 	EntityGroup(String name) {
 		super(name);
 	}
+	ArrayList<Node> EntityGroupConstructorHelper() {
+		return null; //overriden by advice
+	}
+	public void populateMasterNode(Node master) {
+		ArrayList<Node> myNodes = EntityGroupConstructorHelper();
+		myNodes.size(); //<--this is just to get rid of the warning on the line above which is meaningless
+		
+	}
 	public ArrayList<Node> getNodes() {
-		return nodes;
+		return null; //overriden by advice!
 	}
 	public Node getNode(int i) {
-		return nodes.get(i);
+		//taken care of by advice
+		return empty;
 	}
 	public void addNode(Node node) {
-		nodes.add(node);
+		//taken care of in the aspect!
 	}
 	public void removeNode(Node node) {
-		nodes.remove(node);
+		//taken care of in the aspect
 	}
 	public boolean find(Node node) {
-		return nodes.contains(node);
+		return false;  //overriden by advice
 	}
 	public int getX()
 	{

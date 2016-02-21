@@ -1,16 +1,19 @@
+import java.util.ArrayList;
 
 public class ItemList extends EntityGroup implements Printable {
 	public void addItem(Item i) {
 		addNode(i);
 	}
 	public Item getItem(int i) {
-		return (Item)super.getNode(i);
+		Node n = getNode(i);
+		return (Item)n;
 	}
 	public void removeItem(Item i) {
-		super.removeNode(i);
+		removeNode(i);
 	}
 	public int getItemListSize() {
-		return super.getNodes().size();
+		ArrayList<Node> itemListfromAspect = getNodes();
+		return itemListfromAspect.size();
 	}
 	
 }
