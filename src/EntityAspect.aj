@@ -1,6 +1,5 @@
 import java.util.ArrayList;
-//TODO: make get position pointcut and around get position advice which can maybe derive from the abstract
-//aspect and be defined in the following aspect
+
 public aspect EntityAspect extends EntityProtocol{
 	private String Component.description;
 	public String Component.getDescription(Node n){
@@ -76,8 +75,6 @@ public aspect EntityAspect extends EntityProtocol{
 		call(* *.getNo*()) && target(e);
 	ArrayList<Node> around(EntityGroup e): getNodes(e) 
 	{
-		System.out.println("foo!!!");
-		
 		return getChildren(e);
 	}
 	
