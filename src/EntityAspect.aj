@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public aspect EntityAspect extends EntityProtocol{
+public aspect EntityAspect extends EntityAbstractAspect{
 	private String Component.description;
 	public String Component.getDescription(Node n){
 		if(description==null) {
@@ -53,19 +53,19 @@ public aspect EntityAspect extends EntityProtocol{
 	}
 	
 	pointcut removeNode(EntityGroup e, Node n):
-		call(* *.removeN*(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+		call(* *.removeN*(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityAbstractAspect);
 	
 	after(EntityGroup e, Node n) returning(): removeNode(e, n) {
 		removeChild(e,n);
 	}
 	pointcut addNode(EntityGroup e, Node n):
-		call(void *.addNode(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+		call(void *.addNode(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityAbstractAspect);
 	void around(EntityGroup e, Node n): addNode(e, n) {
 		addChild(e,n);
 	}
 	
 	pointcut find(EntityGroup e, Node n):
-		call(boolean *.find(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityProtocol);
+		call(boolean *.find(Node)) && target(e) && args(n) && !within(EntityAspect) && !within(EntityAbstractAspect);
 	boolean around(EntityGroup e, Node n): find(e, n) {
 		return findChild(e,n);
 	}
@@ -79,7 +79,7 @@ public aspect EntityAspect extends EntityProtocol{
 	}
 	
 	pointcut getNode(EntityGroup e, int i):
-		call(Node *.getNode(int)) && target(e) && args(i) && !within(EntityAspect) && !within(EntityProtocol);
+		call(Node *.getNode(int)) && target(e) && args(i) && !within(EntityAspect) && !within(EntityAbstractAspect);
 	Node around(EntityGroup e, int i): getNode(e,i) {
 		return getChild(e,i);
 	}

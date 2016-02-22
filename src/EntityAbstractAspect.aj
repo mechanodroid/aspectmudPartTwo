@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract aspect EntityProtocol {
+public abstract aspect EntityAbstractAspect {
 	public interface Leaf {}
 	declare parents: (Item||Player||Creature) implements Leaf;
 	
@@ -11,7 +11,7 @@ public abstract aspect EntityProtocol {
 	public interface Composite {}
 	declare parents: (EntityGroup||ItemList||Room) implements Composite;
 	
-	public HashMap<EntityGroup, ArrayList<Node>> children = new HashMap<EntityGroup, ArrayList <Node>>(); 
+	protected HashMap<EntityGroup, ArrayList<Node>> children = new HashMap<EntityGroup, ArrayList <Node>>(); 
 	
 	
 	
